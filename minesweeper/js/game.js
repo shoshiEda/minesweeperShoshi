@@ -15,7 +15,8 @@ var gBoard= {
 
 const gLevel = {
     SIZE:4,
-    MINES:3
+    MINES:3,
+    EMPTYCELLS: 16
 }
 
 const gGame={
@@ -26,7 +27,6 @@ const gGame={
     gameOver: false,
     lives:3,
     isHint:false,
-    isLiveLost:false
 }
 
 
@@ -49,7 +49,7 @@ function onInit(){
     if(!elMsgwin.classList.contains('hide'))   elMsgwin.classList.add('hide')
     gBoard=buildBoard()
     renderBored(gBoard)
-    initMines()
+    initLevel()
 }
 
 function buildBoard() {
@@ -67,12 +67,13 @@ function buildBoard() {
 
 }
 
-function initMines(){
+function initLevel(){
     if(gLevel.SIZE===4)   gLevel.MINES=3
     if(gLevel.SIZE===8)   gLevel.MINES=8
     if(gLevel.SIZE===12)  gLevel.MINES=18
     var elspan=document.querySelector('.updateMines')
     elspan.innerText=gLevel.MINES
+    gLevel.EMPTYCELLS=Math.pow(gLevel.SIZE,2)
 }
 
 
@@ -81,7 +82,6 @@ function updateMines(plusMinus){
     var elspan=document.querySelector('.updateMines')
     var counter=+elspan.innerText+plusMinus
     elspan.innerText=counter
-    console.log(isFull(gBoard))
 }
 
 function createCell(){
@@ -199,8 +199,6 @@ function onCellClicked(elcell,i,j){
     }
     if(gGame.gameOver===true || elcell.innerText===FLAG) return
     open(elcell,i,j)
-    console.log(isFull(gBoard))
-    if((!gLevel.MINES) && isFull(gBoard)) youWon()
 }   
 
 function renderCell(position, value){
@@ -234,7 +232,8 @@ function open(elcell,i,j){
     }
     else if(gBoard[i][j].mineAroundCount) elcell.innerText=gBoard[i][j].mineAroundCount
     else elcell.innerText=EMPTY
-    console.log(elcell.innerText,i,j)
+    gLevel.EMPTYCELLS--
+    if(!gLevel.EMPTYCELLS) youWon()
     if(!elcell.innerText)  openNgs(gBoard,i,j)
 }
 
@@ -300,12 +299,15 @@ function onCellMarked(elCell,i,j) {
         elCell.innerText=FLAG
         gBoard[i][j].isMarked=true
         updateMines(-1)
+        gLevel.EMPTYCELLS--
+        if(!gLevel.EMPTYCELLS) youWon()
     }
     else if(elCell.innerText===FLAG)  
     {
         elCell.innerText=EMPTY
         gBoard[i][j].isMarked=false
         updateMines(1)
+        gLevel.EMPTYCELLS++
     } 
 }
 
@@ -364,14 +366,3 @@ function pick(rowIdx,colIdx){/*
 
 
 
-function isFull(board){
-	var elCell
-	var cellClass
-	for (var i = 0; i < board.length; i++) {
-        for (var j = 0; j < board[i].length; j++) {
-			cellClass = `.cell-${i}-${j}`
-   			elCell = document.querySelector(cellClass)
-            if(!elCell.innerText && gGame.isOn && elCell.classList.contains('closed')) return false
-            } }
-    return true
-}
