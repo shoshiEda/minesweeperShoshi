@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>minesweeper</title>
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+
+  <body onload="onInit()">
+    <h1>minesweeper</h1>
+    <button class="buttons restart" onclick="onInit()">😀</button>
+    <button class="buttons" onclick="dark(this)">Dark Mode</button>
+    <div></div>
+    <button class="buttons" onclick="changeBoardSize(this)">4</button>
+    <button class="buttons" onclick="changeBoardSize(this)">8</button>
+    <button class="buttons" onclick="changeBoardSize(this)">12</button>
+    <div></div>
+    <button class="buttons">time:</button>
+    <button class="buttons">mines you need to reveal:</button>
+
+
+
+    <table class="board-container">
+      <tbody class="board"></tbody>
+    </table>
+
+    
+
+    <script src="js/utils.js"></script>
+    <script src="js/game.js"></script>
+   
+  </body>
+</html>
