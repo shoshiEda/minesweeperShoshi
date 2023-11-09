@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>minesweeper</title>
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+
+  <body onload="onInit()">
+    <h1>minesweeper</h1>
+    <button class="buttons restart" onclick="onInit()">😀</button>
+    <button class="buttons" onclick="dark(this)">Dark Mode</button>
+    <button class="buttons lives">Lives:❤❤❤</button>
+    <div></div>
+    <button class="buttons" onclick="changeBoardSize(this)">Easy</button>
+    <button class="buttons" onclick="changeBoardSize(this)">Medium</button>
+    <button class="buttons" onclick="changeBoardSize(this)">Hard</button>
+    <div></div>
+    <button class="buttons">Time:<span class="timer">0.000</span></button>
+    <button class="buttons">Mines left:<span class="updateMines"></span></button>
+    <div></div>
+    <div class="hide gameOver">Game over!</div>
+    <div class="hide loseLife">You lost a life!</div>
+    <div class="hide youWon">You won!</div>
+    <div class="hide useHint">You can use a hint only after the first click</div>
+    <button class="buttons hint1" onclick="hint(this)">💡</button>
+    <button class="buttons hint2" onclick="hint(this)">💡</button>
+    <button class="buttons hint3" onclick="hint(this)">💡</button>
+
+
+
+    <table class="board-container" oncontextmenu="return false;">
+      <tbody class="board"></tbody>
+    </table>
+
+    
+
+    <script src="js/utils.js"></script>
+    <script src="js/game.js"></script>
+   
+  </body>
+</html>

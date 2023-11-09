@@ -1,0 +1,68 @@
+body {
+ 
+  text-align: center;
+}
+
+h1{
+  font-size: 50px;
+}
+
+.board-container {
+  margin: auto;
+  display:ruby
+
+}
+
+.cell {
+  font-size: 1.5em;
+  width: 2em;
+  height: 2em;
+  border: 1px solid black;
+
+}
+
+
+
+.closed{
+  background-color: lightcyan;
+}
+
+.dark{
+  background-color: black;
+  color:white;
+  
+
+}
+
+.board .dark{
+  border: 1px solid white;
+  
+}
+
+.buttons{
+  margin:10px;
+  height:30px;
+  background-color: lightgray;
+  border: 1px solid lightgray;
+}
+
+.hide{
+display:none
+}
+
+.gameOver{
+  background-color: red;
+}
+
+.loseLife{
+  background-color: red;
+}
+
+.shine{
+  background-color: yellow;
+}
+
+.normal{
+  background-color: lightgray;
+  border: 1px solid lightgray;
+}
