@@ -23,7 +23,7 @@ const gGame={
     isOn:false,
     shownCount:0,
     markedCount:0,
-    secsPassed:0,
+    secsPassed:3,
     gameOver: false,
     lives:3,
     isHint:false,
@@ -39,6 +39,9 @@ function onInit(){
     gGame.isOn=false
     gGame.gameOver=false
     gGame.lives=3
+    gGame.secsPassed=3
+    var elSpan=document.querySelector('.safeClick')
+    elSpan.innerText=gGame.secsPassed
     unHint()
     stopTimer()
     var elTimer=document.querySelector('.timer')
@@ -161,7 +164,6 @@ var j=getRandomInt(0,gLevel.SIZE-1)
 while((idxi===i && idxj===j)||gBoard[i][j].isMine===true){
     var i=getRandomInt(0,gLevel.SIZE-1)
     var j=getRandomInt(0,gLevel.SIZE-1)
-    console.log(i,j)
 }
     return {i,j} 
 }
@@ -212,7 +214,7 @@ function open(elcell,i,j){
     if(elcell.innerText===FLAG)  elcell.innerText=EMPTY
     elcell.classList.remove('closed')
     gBoard[i][j].isShown=true
-    if(gBoard[i][j].isMine===true) 
+    if(gBoard[i][j].isMine) 
     { 
         elcell.innerText=MINE
         updateMines(-1)
@@ -320,7 +322,7 @@ function hint(elHint){
     if(!gGame.isOn) {
         var elMsg=document.querySelector('.useHint')  
         elMsg.classList.remove('hide')
-        setTimeout(()  =>  {elMsg.classList.add('hide')},2000)
+        setTimeout(()  =>  {elMsg.classList.add('hide')},4000)
     }
     else if(elHint.classList.contains('shine') || gGame.isHint) return  
     else{
@@ -378,4 +380,32 @@ function isFlag(){
             if(gBoard[i][j].isMarked) return true
 }
     }return false
+}
+
+
+function safeClick(){
+    if(!gGame.secsPassed) return
+    if(!(gLevel.EMPTYCELLS-gLevel.MINES))  return
+    if(!gGame.isOn) {
+        var elMsg=document.querySelector('.useHint')
+        elMsg.classList.remove('hide')
+        setTimeout(() =>{elMsg.classList.add('hide')},3000)
+    return
+    }
+    var elSpan=document.querySelector('.safeClick')
+    var i=getRandomInt(0,gLevel.SIZE-1)
+    var j=getRandomInt(0,gLevel.SIZE-1)
+    const cellSelector = '.'+getClassName({i,j})
+	const elCell = document.querySelector(cellSelector)
+    console.log(i,j,(gBoard[i][j].isShown || gBoard[i][j].isMine))
+
+    while(gBoard[i][j].isShown || gBoard[i][j].isMine){
+        var i=getRandomInt(0,gLevel.SIZE-1)
+        var j=getRandomInt(0,gLevel.SIZE-1)
+    }
+    
+    elCell.classList.add('shineBorders')
+    setTimeout(() => {elCell.classList.remove('shineBorders')},3000)
+    gGame.secsPassed--
+    elSpan.innerText=gGame.secsPassed
 }
