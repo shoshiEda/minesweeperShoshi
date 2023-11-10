@@ -82,6 +82,8 @@ function updateMines(plusMinus){
     var elspan=document.querySelector('.updateMines')
     var counter=+elspan.innerText+plusMinus
     elspan.innerText=counter
+    gLevel.MINES+=plusMinus
+    console.log(gLevel.MINES)
 }
 
 function createCell(){
@@ -113,19 +115,7 @@ function renderBored(board){
 	elBoard.innerHTML = strHTML
 }
 
-function getClassName(position) {
-	const cellClass = `cell-${position.i}-${position.j}`
-    //console.log(cellClass,position)
-	return cellClass
-}
 
-
-
-function renderCell(location, value) {
-	const cellSelector = '.'+getClassName(location)
-	const elCell = document.querySelector(cellSelector)
-	elCell.innerHTML = value
-}
 
 function dark(elBtn){
 var elBody=document.querySelector('body')
@@ -195,17 +185,13 @@ function onCellClicked(elcell,i,j){
     }
     else if(gGame.isHint){
         pick(i,j)
+        gGame.isHint=false
         return
     }
     if(gGame.gameOver===true || elcell.innerText===FLAG) return
     open(elcell,i,j)
 }   
 
-function renderCell(position, value){
-     var selector = getClassName(position)
-     var elToCell = document.querySelector('.' + selector)
-     elToCell.innerHTML = value
-}
 
 
 function setMinesNegsCount(rowIdx,colIdx,board){
@@ -223,17 +209,20 @@ for(var i = rowIdx - 1; i <= rowIdx + 1; i++){
 }}
 
 function open(elcell,i,j){
+    if(elcell.innerText===FLAG)  elcell.innerText=EMPTY
     elcell.classList.remove('closed')
+    gBoard[i][j].isShown=true
     if(gBoard[i][j].isMine===true) 
     { 
         elcell.innerText=MINE
         updateMines(-1)
         loseLife()
+        elcell.classList.add('shake')
     }
     else if(gBoard[i][j].mineAroundCount) elcell.innerText=gBoard[i][j].mineAroundCount
     else elcell.innerText=EMPTY
     gLevel.EMPTYCELLS--
-    if(!gLevel.EMPTYCELLS) youWon()
+    if(!gLevel.EMPTYCELLS && !gLevel.MINES && isFlag()) youWon()
     if(!elcell.innerText)  openNgs(gBoard,i,j)
 }
 
@@ -300,7 +289,7 @@ function onCellMarked(elCell,i,j) {
         gBoard[i][j].isMarked=true
         updateMines(-1)
         gLevel.EMPTYCELLS--
-        if(!gLevel.EMPTYCELLS) youWon()
+        if(!gLevel.EMPTYCELLS && !gLevel.MINES) youWon()
     }
     else if(elCell.innerText===FLAG)  
     {
@@ -309,6 +298,8 @@ function onCellMarked(elCell,i,j) {
         updateMines(1)
         gLevel.EMPTYCELLS++
     } 
+    if(!gLevel.EMPTYCELLS && !gLevel.MINES) youWon()
+
 }
 
 function loseLife(){
@@ -331,6 +322,7 @@ function hint(elHint){
         elMsg.classList.remove('hide')
         setTimeout(()  =>  {elMsg.classList.add('hide')},2000)
     }
+    else if(elHint.classList.contains('shine') || gGame.isHint) return  
     else{
     elHint.classList.add('shine')
     gGame.isHint=true
@@ -347,22 +339,43 @@ function unHint(){
     }
 }
 
-function pick(rowIdx,colIdx){/*
+function pick(rowIdx,colIdx){
     for(var i = rowIdx - 1; i <= rowIdx + 1; i++){
         if(i < 0 || i >= gBoard.length) continue
     
         for(var j = colIdx - 1; j <= colIdx + 1; j++){
             if(j < 0 || j >=gBoard[i].length) continue
 
-            if(gBoard[i][j].isMine===MINE) renderCell({i,j}, MINE)
+            if(gBoard[i][j].isMine===true) renderCell({i,j}, MINE)
             else if(gBoard[i][j].mineAroundCount) renderCell({i,j},gBoard[i][j].mineAroundCount)
             else renderCell({i,j},EMPTY)
-
+            var cellSelector = '.'+getClassName({i,j})
+	        var elCell = document.querySelector(cellSelector)
+            elCell.classList.add('shineBorders')
         }
     }
-*/
+    setTimeout(() =>{unPick(rowIdx,colIdx)},1000)
 }
 
+function unPick(rowIdx,colIdx)
+{
+    for(var i = rowIdx - 1; i <= rowIdx + 1; i++){
+        if(i < 0 || i >= gBoard.length) continue
+    
+        for(var j = colIdx - 1; j <= colIdx + 1; j++){
+            if(j < 0 || j >=gBoard[i].length) continue
+            if(gBoard[i][j].isMarked) renderCell({i,j}, FLAG)
+            else if(!gBoard[i][j].isShown) renderCell({i,j}, EMPTY)
+            var cellSelector = '.'+getClassName({i,j})
+	        var elCell = document.querySelector(cellSelector)
+            elCell.classList.remove('shineBorders')
+}
+    }}
 
-
-
+function isFlag(){
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[i].length; j++) {
+            if(gBoard[i][j].isMarked) return true
+}
+    }return false
+}
