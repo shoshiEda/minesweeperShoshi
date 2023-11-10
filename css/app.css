@@ -21,6 +21,8 @@ h1{
 
 }
 
+
+
 .closed{
   background-color: lightcyan;
 }
@@ -40,6 +42,27 @@ h1{
 .buttons{
   margin:10px;
   height:30px;
+  background-color: lightgray;
+  border: 1px solid lightgray;
+}
+
+.hide{
+display:none
+}
+
+.gameOver{
+  background-color: red;
+}
+
+.loseLife{
+  background-color: red;
+}
+
+.shine{
+  background-color: yellow;
+}
+
+.normal{
   background-color: lightgray;
   border: 1px solid lightgray;
 }
