@@ -10,12 +10,12 @@ body {
 h1{
   font-size: 100px;
   text-shadow: 5px 5px 0px lightgray;
+  margin-bottom:20px;
 }
 
 .board-container {
-  margin: auto;
-  display:ruby
-
+  margin:auto;
+  margin-bottom:200px;
 }
 
 .cell {
@@ -26,7 +26,6 @@ h1{
   background-color: aliceblue;
   cursor: pointer;
   box-shadow:10px 5px 5px rgb(167, 166, 166);
-
 }
 
 
@@ -115,4 +114,18 @@ display:none
 
 .useHint{
   background-color: aliceblue;
+}
+
+.megaHint{
+  height:60px;
+  width: 60px;
+  font-size: 35px;
+  text-align: center;
+}
+
+.restart{
+  height:60px;
+  width: 60px;
+  font-size: 35px;
+  text-align: center;
 }
